@@ -17,12 +17,33 @@ import installmentRoutes from "./modules/installement/installementRoutes.js";
 import personalCategoryRoutes from "./modules/personalCategory/personalCategoryRoutes.js";
 import personalTransactionRoutes from "./modules/personalTransaction/personalTransactionRoutes.js";
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    credentials: true,
-  }),
-);
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "https://ledger.awanrealestate.com",
+  "http://localhost:3000",
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+  ],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
