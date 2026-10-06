@@ -1,5 +1,8 @@
 import express from "express";
 const app = express();
+
+app.set("trust proxy", 1);
+
 import error from "./middleware/error.js";
 import cors from "cors";
 import helmet from "helmet";
@@ -27,7 +30,7 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(null, false);
     }
   },
   credentials: true,
