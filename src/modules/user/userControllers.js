@@ -27,8 +27,12 @@ export const loginUser = HandleAsyncError(async (req, res, next) => {
 
 export const logout = HandleAsyncError(async (req, res, next) => {
   res.cookie("token", null, {
-    expires: new Date(Date.now()),
+    expires: new Date(0),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    domain:
+      process.env.NODE_ENV === "production" ? ".awanrealestate.com" : undefined,
   });
 
   res.status(200).json({

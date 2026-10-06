@@ -9,9 +9,7 @@ const sendToken = (user, statusCode, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     domain:
-      process.env.NODE_ENV === "production"
-        ? ".awanrealestate.com"
-        : "localhost",
+      process.env.NODE_ENV === "production" ? ".awanrealestate.com" : undefined,
   };
 
   res.status(statusCode).cookie("token", token, options).json({
